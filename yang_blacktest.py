@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 
 
 class BS4Test(unittest.TestCase):
-
     @staticmethod
     def soup1(*args, **kwargs):
         return BeautifulSoup("""
