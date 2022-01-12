@@ -14,7 +14,7 @@ class BS4Test(unittest.TestCase):
                 <nochild></nochild>
                 <onechild><child></child></onechild>
                 <twochildren><child1></child1><child2></child2></twochildren>
-                <grandchildren><withchild>a</withchild><withchild2>b</withchild2></grandchildren>
+                <grandchildren><withchild><g1></g1><g2></g2></withchild><withchild2><g3></g3><g4></g4></withchild2></grandchildren>
                 <a id="34df9e" class="class-a class-b" rel="nofollow"></a>
               </body>
             </html>
@@ -44,15 +44,15 @@ class BS4Test(unittest.TestCase):
         soup = self.soup1()
         # when the tag has no children
         self.assertEqual(list(soup.nochild.descendants), [])
-        # when the tag has one child and no grandchildren
-        onechild = soup.onechild
-        self.assertEqual(list(onechild.descendants), [onechild.child])
         # when the tag has two children and no grandchildren
         twochildren = soup.twochildren
         self.assertEqual(list(twochildren.descendants), [twochildren.child1, twochildren.child2])
         # when the tag has grandchildren
         grandchildren = soup.grandchildren
-        self.assertEqual(list(grandchildren.descendants), [grandchildren.withchild, grandchildren.withchild.string, grandchildren.withchild2, grandchildren.withchild2.string])
+        self.assertEqual(list(grandchildren.descendants), [
+            grandchildren.withchild, grandchildren.withchild.g1, grandchildren.withchild.g2,
+            grandchildren.withchild2, grandchildren.withchild2.g3, grandchildren.withchild2.g4,
+        ])
 
     # check if a tag has an attribute
     def test_has_attr(self):
