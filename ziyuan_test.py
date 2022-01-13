@@ -17,6 +17,7 @@ class TestCase(unittest.TestCase):
                 <html>
                     <body>
                         <div><p>Hello World</p></div>
+                        <div class="test_insert"><p> Hello World </p> Hello World </div>
                     </body>
                 </html>
             """, "html.parser", *args, **kwargs)    
@@ -36,23 +37,6 @@ class TestCase(unittest.TestCase):
         Soup.p.append(" test_append_3")
         # Expected outputs: "<p>Hello World test_append_1 test_append_2 test_append_3</p>"
         self.assertEqual("<p>Hello World test_append_1 test_append_2 test_append_3</p>", str(Soup.p))
-
-    # This function is similar to the .append() function, except that it does not add a new element to the end of the parent node's .contents property, but inserts the element at the specified position.
-    def test_insert(self):
-        Soup = self.soup()
-        tag = Soup.find("p")
-        # 1.Insert "test_insert_1" after the <p> tag;
-        tag.insert(0,"test_insert_1 ")
-        # Expected outputs: "<p>test_insert_1 Hello World</p>"
-        self.assertEqual("<p>test_insert_1 Hello World</p>", str(Soup.p))
-        # 2.Insert "test_insert_2" after the first string of the <p> tag;
-        tag.insert(1,"test_insert_2 ")
-        # Expected outputs: "<p>Hello World test_insert_1 test_insert_2</p>"
-        self.assertEqual("<p>test_insert_1 test_insert_2 Hello World</p>", str(Soup.p))
-        # 3.Insert "test_insert_3" after the third string of the <p> tag;
-        tag.insert(3," test_insert_3")
-        # Expected outputs: "<p>Hello World test_insert_1 test_insert_2 test_insert_3</p>"
-        self.assertEqual("<p>test_insert_1 test_insert_2 Hello World test_insert_3</p>", str(Soup.p))
 
     # This function is similar to the .append() function, except that it can add multiple new elements at the end of the parent node's .contents property.
     def test_expend(self): 
@@ -109,23 +93,31 @@ class TestCase(unittest.TestCase):
 
 
     # Whitebox Testing
+    # # This function is similar to the .append() function, except that it does not add a new element to the end of the parent node's .contents property, but inserts the element at the specified position.
     def test_insert(self):
-        Soup = BeautifulSoup("<div><a></a>text</div>", "html.parser")
-        tag = Soup.find("p")
-        # 1.Insert "test_insert_1" after the <p> tag;
-        tag.insert(0,"test_insert_1 ")
-        # Expected outputs: "<p>test_insert_1 Hello World</p>"
-        self.assertEqual("<p>test_insert_1 Hello World</p>", str(Soup.p))
+        Soup = self.soup()
+        tag = Soup.find(class_="test_insert")
         
-        # 2.Insert "test_insert_2" after the first string of the <p> tag;
-        tag.insert(1," test_insert_2")
-        # Expected outputs: "<p>Hello World test_insert_1 test_insert_2</p>"
-        self.assertEqual("<p>test_insert_1 Hello World test_insert_2</p>", str(Soup.p))
-        
-        # 3.Insert "test_insert_3" after the third string of the <p> tag;
-        tag.insert(3," test_insert_3")
-        # Expected outputs: "<p>Hello World test_insert_1 test_insert_2 test_insert_3</p>"
-        self.assertEqual("<p>test_insert_1 Hello World test_insert_2 test_insert_3</p>", str(Soup.p))
+        # Test that the insertion position is in the middle of the string
+        tag.insert(3,"test_insert_0 ")
+        self.assertEqual('<div class="test_insert"><p> Hello World </p> Hello World test_insert_0 </div>', str(tag))
+                
+        # Test the case where the insertion position exceeds the length of the string, and there are escape characters in the inserted string
+        tag.insert(10,' <p> test_insert_20  & "&" </p> &lt;p&gt;')
+        self.assertEqual('<div class="test_insert"><p> Hello World </p> Hello World test_insert_0  &lt;p&gt; test_insert_20  &amp; "&amp;" &lt;/p&gt; &amp;lt;p&amp;gt;</div>', str(tag))
+        self.assertEqual(' Hello World  Hello World test_insert_0  <p> test_insert_20  & "&" </p> &lt;p&gt;', tag.text)
+                
+        # If the insert position is negative, the function will throw an exception
+        # tag.insert(-10,' test_insert_-10 ')
+        try:
+            tag.insert(-10,' test_insert_-10 ')
+        except:
+            # Throws an exception, this test passes
+            self.assertEqual(1,1)
+        else:
+            # No exception was thrown, this test failed
+            self.assertEqual(1,0)
+                
         
         
 if __name__ == '__main__':
