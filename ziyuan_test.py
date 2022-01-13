@@ -33,10 +33,10 @@ class TestCase(unittest.TestCase):
         Soup.p.append(" test_append_2")
         # Expected outputs: "<p>Hello World test_append_1 test_append_2</p>"
         self.assertEqual("<p>Hello World test_append_1 test_append_2</p>", str(Soup.p))
-        # 3.add "test_append_3" after the content of the <p> tag;
-        Soup.p.append(" test_append_3")
-        # Expected outputs: "<p>Hello World test_append_1 test_append_2 test_append_3</p>"
-        self.assertEqual("<p>Hello World test_append_1 test_append_2 test_append_3</p>", str(Soup.p))
+        # 3.add " " after the content of the <p> tag;
+        Soup.p.append("< >")
+        # Expected outputs: "<p>Hello World test_append_1 test_append_2&lt; &gt;</p>"
+        self.assertEqual("<p>Hello World test_append_1 test_append_2&lt; &gt;</p>", str(Soup.p))
 
     # This function is similar to the .append() function, except that it can add multiple new elements at the end of the parent node's .contents property.
     def test_expend(self): 
@@ -51,11 +51,11 @@ class TestCase(unittest.TestCase):
         Soup.p.extend(extend_text_2)
         # Expected outputs: "<p>Hello World test_expend_1? test_expend_2!</p>"
         self.assertEqual("<p>Hello World test_expend_1? test_expend_2!</p>", str(Soup.p))
-        # 3.Insert array [" ", "test_expend_3", "..."] after the content of the <p> tag;
-        extend_text_3 = [" ", "test_expend_3", "..."]
+        # 3.Insert array ["<", "test_expend_3", ">"] after the content of the <p> tag;
+        extend_text_3 = ["<", "test_expend_3", ">"]
         Soup.p.extend(extend_text_3)
-        # Expected outputs: "<p>Hello World test_expend_1? test_expend_2! test_expend_3...</p>"
-        self.assertEqual("<p>Hello World test_expend_1? test_expend_2! test_expend_3...</p>", str(Soup.p))
+        # Expected outputs: "<p>Hello World test_expend_1? test_expend_2!&lt;test_expend_3&gt;</p>"
+        self.assertEqual("<p>Hello World test_expend_1? test_expend_2!&lt;test_expend_3&gt;</p>", str(Soup.p))
         
     # This function inserts tags or strings immediately before something else in the parse tree
     def test_insert_before(self):
@@ -69,10 +69,10 @@ class TestCase(unittest.TestCase):
         alex_tag.insert_before("test_insert_before_2 ")
         # Expected outputs: "test_insert_before_1 test_insert_before_2 <p>Hello World</p>"
         self.assertEqual("<div>test_insert_before_1 test_insert_before_2 <p>Hello World</p></div>", str(Soup.div))
-        # 3.Insert "test_insert_before_2" before the <p> tag;
-        alex_tag.insert_before("test_insert_before_3 ")
-        # Expected outputs: "test_insert_before_1 test_insert_before_2 test_insert_before_3 <p>Hello World</p>"
-        self.assertEqual("<div>test_insert_before_1 test_insert_before_2 test_insert_before_3 <p>Hello World</p></div>", str(Soup.div))
+        # 3.Insert "< >" before the <p> tag;
+        alex_tag.insert_before("< >")
+        # Expected outputs: "<div>test_insert_before_1 test_insert_before_2 &lt; &gt;<p>Hello World</p></div>"
+        self.assertEqual("<div>test_insert_before_1 test_insert_before_2 &lt; &gt;<p>Hello World</p></div>", str(Soup.div))
 
     # This function inserts tags or strings immediately following something else in the parse tree
     def test_insert_after(self):
@@ -86,10 +86,10 @@ class TestCase(unittest.TestCase):
         alex_tag.insert_after(" test_insert_after_2")
         # Expected outputs: "<p>Hello World</p> test_insert_after_2 test_insert_after_1"
         self.assertEqual("<div><p>Hello World</p> test_insert_after_2 test_insert_after_1</div>", str(Soup.div))
-        # 3.Insert "test_insert_after_3" after the <p> tag;
-        alex_tag.insert_after(" test_insert_after_3")
-        # Expected outputs: "<p>Hello World</p> test_insert_after_3 test_insert_after_2 test_insert_after_1"
-        self.assertEqual("<div><p>Hello World</p> test_insert_after_3 test_insert_after_2 test_insert_after_1</div>", str(Soup.div))
+        # 3.Insert "< >" after the <p> tag;
+        alex_tag.insert_after("< >")
+        # Expected outputs: "<div><p>Hello World</p>&lt; &gt; test_insert_after_2 test_insert_after_1</div>"
+        self.assertEqual("<div><p>Hello World</p>&lt; &gt; test_insert_after_2 test_insert_after_1</div>", str(Soup.div))
 
 
     # Whitebox Testing
