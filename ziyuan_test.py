@@ -121,11 +121,15 @@ class TestCase(unittest.TestCase):
         tag.insert(0,"test_insert_0 ")
         self.assertEqual('<div class="test_insert">test_insert_0 <p> Hello World </p> Hello World </div>', str(tag))
                 
+        Soup = self.soup()
+        tag = Soup.find(class_="test_insert")
         # Test the case where the insertion position exceeds the length of the string, and there are escape characters in the inserted string
         tag.insert(10,' <p> test_insert_10  & "&" </p> &lt;p&gt;')
-        self.assertEqual('<div class="test_insert">test_insert_0 <p> Hello World </p> Hello World  &lt;p&gt; test_insert_10  &amp; "&amp;" &lt;/p&gt; &amp;lt;p&amp;gt;</div>', str(tag))
-        self.assertEqual(' Hello World  Hello World test_insert_0  <p> test_insert_20  & "&" </p> &lt;p&gt;', tag.text)
-                
+        self.assertEqual('<div class="test_insert"><p> Hello World </p> Hello World  &lt;p&gt; test_insert_10  &amp; "&amp;" &lt;/p&gt; &amp;lt;p&amp;gt;</div>', str(tag))
+        self.assertEqual(' Hello World  Hello World  <p> test_insert_10  & "&" </p> &lt;p&gt;', tag.text)
+
+        Soup = self.soup()
+        tag = Soup.find(class_="test_insert")
         # If the insert position is negative, the function will throw an exception
         # tag.insert(-10,' test_insert_-10 ')
         try:
